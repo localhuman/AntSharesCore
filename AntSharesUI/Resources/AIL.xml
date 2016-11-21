@@ -1,0 +1,108 @@
+<SyntaxDefinition name="AIL"
+        xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+    <Color name="Comment" foreground="Green" />
+    <Color name="String" foreground="Brown" />
+
+    <!-- This is the main ruleset. -->
+    <RuleSet>
+        <Span color="Comment" begin="//" />
+        <Span color="Comment" multiline="true" begin="/\*" end="\*/" />
+
+        <Span color="String">
+            <Begin>"</Begin>
+            <End>"</End>
+            <RuleSet>
+                <!-- nested span for escape sequences -->
+                <Span begin="\\" end="." />
+            </RuleSet>
+        </Span>
+
+        <Keywords foreground="Blue">
+            <Word>PUSH</Word>
+            <Word>NOP</Word>
+            <Word>JMP</Word>
+            <Word>JMPIF</Word>
+            <Word>JMPIFNOT</Word>
+            <Word>CALL</Word>
+            <Word>RET</Word>
+            <Word>APPCALL</Word>
+            <Word>SYSCALL</Word>
+            <Word>HALTIFNOT</Word>
+            <Word>HALT</Word>
+            <Word>TOALTSTACK</Word>
+            <Word>FROMALTSTACK</Word>
+            <Word>IFDUP</Word>
+            <Word>DEPTH</Word>
+            <Word>DROP</Word>
+            <Word>DUP</Word>
+            <Word>NIP</Word>
+            <Word>OVER</Word>
+            <Word>PICK</Word>
+            <Word>ROLL</Word>
+            <Word>ROT</Word>
+            <Word>SWAP</Word>
+            <Word>TUCK</Word>
+            <Word>CAT</Word>
+            <Word>SUBSTR</Word>
+            <Word>LEFT</Word>
+            <Word>RIGHT</Word>
+            <Word>SIZE</Word>
+            <Word>INVERT</Word>
+            <Word>AND</Word>
+            <Word>OR</Word>
+            <Word>XOR</Word>
+            <Word>EQUAL</Word>
+            <Word>INC</Word>
+            <Word>DEC</Word>
+            <Word>MUL2</Word>
+            <Word>DIV2</Word>
+            <Word>NEGATE</Word>
+            <Word>ABS</Word>
+            <Word>NOT</Word>
+            <Word>NOTZERO</Word>
+            <Word>ADD</Word>
+            <Word>SUB</Word>
+            <Word>MUL</Word>
+            <Word>DIV</Word>
+            <Word>MOD</Word>
+            <Word>LSHIFT</Word>
+            <Word>RSHIFT</Word>
+            <Word>BOOLAND</Word>
+            <Word>BOOLOR</Word>
+            <Word>NUMEQUAL</Word>
+            <Word>NUMNOTEQUAL</Word>
+            <Word>LESSTHAN</Word>
+            <Word>GREATERTHAN</Word>
+            <Word>LESSTHANOREQUAL</Word>
+            <Word>GREATERTHANOREQUAL</Word>
+            <Word>MIN</Word>
+            <Word>MAX</Word>
+            <Word>WITHIN</Word>
+            <Word>SHA1</Word>
+            <Word>SHA256</Word>
+            <Word>HASH160</Word>
+            <Word>HASH256</Word>
+            <Word>CHECKSIG</Word>
+            <Word>CHECKMULTISIG</Word>
+            <Word>ARRAYSIZE</Word>
+            <Word>PACK</Word>
+            <Word>UNPACK</Word>
+            <Word>DISTINCT</Word>
+            <Word>SORT</Word>
+            <Word>REVERSE</Word>
+            <Word>CONCAT</Word>
+            <Word>UNION</Word>
+            <Word>INTERSECT</Word>
+            <Word>EXCEPT</Word>
+            <Word>TAKE</Word>
+            <Word>SKIP</Word>
+            <Word>PICKITEM</Word>
+            <Word>ALL</Word>
+            <Word>ANY</Word>
+            <Word>SUM</Word>
+            <Word>AVERAGE</Word>
+            <Word>MAXITEM</Word>
+            <Word>MINITEM</Word>
+        </Keywords>
+    </RuleSet>
+</SyntaxDefinition>

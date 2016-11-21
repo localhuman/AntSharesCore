@@ -16,7 +16,7 @@ namespace AntShares.Shell
 {
     internal class MainService : ConsoleServiceBase
     {
-        private RpcServer rpc;
+        private RpcServerWithWallet rpc;
         private ConsensusService consensus;
 
         protected LocalNode LocalNode { get; private set; }
@@ -521,8 +521,8 @@ namespace AntShares.Shell
             LocalNode.Start(Settings.Default.NodePort);
             if (args.Length >= 1 && args[0] == "/rpc")
             {
-                rpc = new RpcServer(LocalNode);
-                rpc.Start(Settings.Default.UriPrefix.OfType<string>().ToArray());
+                rpc = new RpcServerWithWallet(LocalNode);
+                rpc.Start(Settings.Default.UriPrefix.OfType<string>().ToArray(), Settings.Default.SslCert, Settings.Default.SslCertPassword);
             }
         }
 

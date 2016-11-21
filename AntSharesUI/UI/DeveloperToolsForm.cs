@@ -1,10 +1,16 @@
 ﻿using AntShares.Network;
 using AntShares.Properties;
 using AntShares.Wallets;
+using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using System;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Windows.Forms;
+using System.Windows.Media;
+using System.Xml;
 
 namespace AntShares.UI
 {
@@ -12,9 +18,25 @@ namespace AntShares.UI
     {
         private SignatureContext context;
 
+        static DeveloperToolsForm()
+        {
+            using (StringReader sr = new StringReader(Resources.AIL))
+            using (XmlReader xr = XmlReader.Create(sr))
+            {
+                IHighlightingDefinition hd = HighlightingLoader.Load(xr, HighlightingManager.Instance);
+                HighlightingManager.Instance.RegisterHighlighting(hd.Name, new[] { "a" }, hd);
+            }
+        }
+
         public DeveloperToolsForm()
         {
             InitializeComponent();
+            TextEditor editor = new TextEditor();
+            editor.FontFamily = new FontFamily("Lucida Console");
+            editor.Options.HighlightCurrentLine = true;
+            editor.ShowLineNumbers = true;
+            editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("AIL");
+            elementHost1.Child = editor;
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)

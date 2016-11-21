@@ -61,6 +61,119 @@ namespace AntShares.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _1479759668_Open {
+            get {
+                object obj = ResourceManager.GetObject("_1479759668_Open", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _1479759946_Save {
+            get {
+                object obj = ResourceManager.GetObject("_1479759946_Save", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;SyntaxDefinition name=&quot;C#&quot;
+        ///        xmlns=&quot;http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008&quot;&gt;
+        ///    &lt;Color name=&quot;Comment&quot; foreground=&quot;Green&quot; /&gt;
+        ///    &lt;Color name=&quot;String&quot; foreground=&quot;Blue&quot; /&gt;
+        ///
+        ///    &lt;!-- This is the main ruleset. --&gt;
+        ///    &lt;RuleSet&gt;
+        ///        &lt;Span color=&quot;Comment&quot; begin=&quot;//&quot; /&gt;
+        ///        &lt;Span color=&quot;Comment&quot; multiline=&quot;true&quot; begin=&quot;/\*&quot; end=&quot;\*/&quot; /&gt;
+        ///
+        ///        &lt;Span color=&quot;String&quot;&gt;
+        ///            &lt;Begin&gt;&quot;&lt;/Begin&gt;
+        ///            &lt;End&gt;&quot;&lt;/End&gt;
+        ///            &lt;RuleSet&gt;
+        ///                &lt;!-- nes [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AIL {
+            get {
+                return ResourceManager.GetString("AIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_step {
+            get {
+                object obj = ResourceManager.GetObject("arrow_step", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_step_out {
+            get {
+                object obj = ResourceManager.GetObject("arrow_step_out", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_step_over {
+            get {
+                object obj = ResourceManager.GetObject("arrow_step_over", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap compile {
+            get {
+                object obj = ResourceManager.GetObject("compile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap control {
+            get {
+                object obj = ResourceManager.GetObject("control", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap control_pause {
+            get {
+                object obj = ResourceManager.GetObject("control_pause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap control_stop_square {
+            get {
+                object obj = ResourceManager.GetObject("control_stop_square", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] OnchainCertificate {
