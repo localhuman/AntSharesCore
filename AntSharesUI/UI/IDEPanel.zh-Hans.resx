@@ -117,13 +117,53 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="tabPage1.Text" xml:space="preserve">
-    <value>合约编辑器</value>
+  <data name="tabPage3.Text" xml:space="preserve">
+    <value>调用堆栈</value>
   </data>
-  <data name="tabPage2.Text" xml:space="preserve">
-    <value>合约参数</value>
+  <data name="columnHeader2.Text" xml:space="preserve">
+    <value>偏移</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>AntShares 开发人员工具</value>
+  <data name="columnHeader3.Text" xml:space="preserve">
+    <value>脚本散列</value>
+  </data>
+  <data name="tabPage4.Text" xml:space="preserve">
+    <value>堆栈</value>
+  </data>
+  <data name="columnHeader4.Text" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="tabPage5.Text" xml:space="preserve">
+    <value>备用堆栈</value>
+  </data>
+  <data name="columnHeader5.Text" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="toolStripButton1.Text" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="toolStripButton2.Text" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="toolStripButton3.Text" xml:space="preserve">
+    <value>运行</value>
+  </data>
+  <data name="toolStripButton4.Text" xml:space="preserve">
+    <value>逐语句</value>
+  </data>
+  <data name="toolStripButton5.Text" xml:space="preserve">
+    <value>逐过程</value>
+  </data>
+  <data name="toolStripButton6.Text" xml:space="preserve">
+    <value>跳出</value>
+  </data>
+  <data name="toolStripButton7.Text" xml:space="preserve">
+    <value>编译</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="listView3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>179, 392</value>
+  </data>
+  <data name="tabPage5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>185, 398</value>
   </data>
 </root>
