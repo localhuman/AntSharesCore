@@ -30,6 +30,10 @@
         }
       }
     },
-    "net461": {}
+    "net461": {
+      "frameworkAssemblies": {
+        "System.ServiceProcess": "4.0.0.0"
+      }
+    }
   }
 }

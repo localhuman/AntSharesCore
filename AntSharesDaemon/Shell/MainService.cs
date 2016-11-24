@@ -21,7 +21,7 @@ namespace AntShares.Shell
 
         protected LocalNode LocalNode { get; private set; }
         protected override string Prompt => "ant";
-        public override string ServiceName => "AntSharesDaemon";
+        public override string ServiceName => "AntShares";
 
         protected override bool OnCommand(string[] args)
         {
