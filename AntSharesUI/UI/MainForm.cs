@@ -1,5 +1,6 @@
 ﻿using AntShares.Core;
 using AntShares.Cryptography;
+using AntShares.Implementations.Blockchains.LevelDB;
 using AntShares.Implementations.Wallets.EntityFramework;
 using AntShares.IO;
 using AntShares.Properties;
@@ -11,10 +12,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -22,7 +25,7 @@ namespace AntShares.UI
 {
     internal partial class MainForm : Form
     {
-        private static readonly UInt160 RecycleScriptHash = new[] { (byte)ScriptOp.OP_TRUE }.ToScriptHash();
+        private static readonly UInt160 RecycleScriptHash = new[] { (byte)OpCode.OP_TRUE }.ToScriptHash();
         private bool balance_changed = false;
         private DateTime persistence_time = DateTime.MinValue;
 
@@ -42,9 +45,30 @@ namespace AntShares.UI
             }
         }
 
+        private void AddAddressToListView(UInt160 scriptHash, bool selected = false)
+        {
+            string address = Wallet.ToAddress(scriptHash);
+            ListViewItem item = listView1.Items[address];
+            if (item == null)
+            {
+                ListViewGroup group = listView1.Groups["watchOnlyGroup"];
+                item = listView1.Items.Add(new ListViewItem(address, group)
+                {
+                    Name = address,
+                    Tag = scriptHash
+                });
+            }
+            item.Selected = selected;
+        }
+
         private void AddContractToListView(Contract contract, bool selected = false)
         {
             ListViewItem item = listView1.Items[contract.Address];
+            if (item?.Tag is UInt160)
+            {
+                listView1.Items.Remove(item);
+                item = null;
+            }
             if (item == null)
             {
                 ListViewGroup group = contract.IsStandard ? listView1.Groups["standardContractGroup"] : listView1.Groups["nonstandardContractGroup"];
@@ -60,7 +84,7 @@ namespace AntShares.UI
         private void Blockchain_PersistCompleted(object sender, Block block)
         {
             persistence_time = DateTime.Now;
-            if (Program.CurrentWallet?.FindCoins().Any(p => p.Output.AssetId.Equals(Blockchain.AntShare.Hash)) == true)
+            if (Program.CurrentWallet?.GetCoins().Any(p => !p.State.HasFlag(CoinState.Spent) && p.Output.AssetId.Equals(Blockchain.AntShare.Hash)) == true)
                 balance_changed = true;
             CurrentWallet_TransactionsChanged(null, Enumerable.Empty<TransactionInfo>());
         }
@@ -96,9 +120,13 @@ namespace AntShares.UI
             listView1.Items.Clear();
             if (Program.CurrentWallet != null)
             {
-                foreach (Contract contract in Program.CurrentWallet.GetContracts())
+                foreach (UInt160 scriptHash in Program.CurrentWallet.GetAddresses().ToArray())
                 {
-                    AddContractToListView(contract);
+                    Contract contract = Program.CurrentWallet.GetContract(scriptHash);
+                    if (contract == null)
+                        AddAddressToListView(scriptHash);
+                    else
+                        AddContractToListView(contract);
                 }
             }
             balance_changed = true;
@@ -167,10 +195,53 @@ namespace AntShares.UI
             }
         }
 
+        private void ImportBlocks(Stream stream)
+        {
+            LevelDBBlockchain blockchain = (LevelDBBlockchain)Blockchain.Default;
+            blockchain.VerifyBlocks = false;
+            using (BinaryReader r = new BinaryReader(stream))
+            {
+                uint count = r.ReadUInt32();
+                for (int height = 0; height < count; height++)
+                {
+                    byte[] array = r.ReadBytes(r.ReadInt32());
+                    if (height > Blockchain.Default.Height)
+                    {
+                        Block block = array.AsSerializable<Block>();
+                        Blockchain.Default.AddBlock(block);
+                    }
+                }
+            }
+            blockchain.VerifyBlocks = true;
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Program.LocalNode.Start(Settings.Default.NodePort);
-            Blockchain.PersistCompleted += Blockchain_PersistCompleted;
+            Task.Run(() =>
+            {
+                const string acc_path = "chain.acc";
+                const string acc_zip_path = acc_path + ".zip";
+                if (File.Exists(acc_path))
+                {
+                    using (FileStream fs = new FileStream(acc_path, FileMode.Open, FileAccess.Read, FileShare.None))
+                    {
+                        ImportBlocks(fs);
+                    }
+                    File.Delete(acc_path);
+                }
+                else if (File.Exists(acc_zip_path))
+                {
+                    using (FileStream fs = new FileStream(acc_zip_path, FileMode.Open, FileAccess.Read, FileShare.None))
+                    using (ZipArchive zip = new ZipArchive(fs, ZipArchiveMode.Read))
+                    using (Stream zs = zip.GetEntry(acc_path).Open())
+                    {
+                        ImportBlocks(zs);
+                    }
+                    File.Delete(acc_zip_path);
+                }
+                Blockchain.PersistCompleted += Blockchain_PersistCompleted;
+                Program.LocalNode.Start(Settings.Default.NodePort);
+            });
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -197,9 +268,9 @@ namespace AntShares.UI
                 return;
             if (balance_changed)
             {
-                IEnumerable<Coin> coins = Program.CurrentWallet?.FindCoins() ?? Enumerable.Empty<Coin>();
+                IEnumerable<Coin> coins = Program.CurrentWallet?.GetCoins().Where(p => !p.State.HasFlag(CoinState.Spent)) ?? Enumerable.Empty<Coin>();
                 Fixed8 anc_claim_available = Wallet.CalculateClaimAmount(Program.CurrentWallet.GetUnclaimedCoins().Select(p => p.Reference));
-                Fixed8 anc_claim_unavailable = Wallet.CalculateClaimAmountUnavailable(coins.Where(p => !p.State.HasFlag(CoinState.Spent) && p.State.HasFlag(CoinState.Confirmed) && p.Output.AssetId.Equals(Blockchain.AntShare.Hash)).Select(p => p.Reference), Blockchain.Default.Height);
+                Fixed8 anc_claim_unavailable = Wallet.CalculateClaimAmountUnavailable(coins.Where(p => p.State.HasFlag(CoinState.Confirmed) && p.Output.AssetId.Equals(Blockchain.AntShare.Hash)).Select(p => p.Reference), Blockchain.Default.Height + 1);
                 Fixed8 anc_claim = anc_claim_available + anc_claim_unavailable;
                 var assets = coins.GroupBy(p => p.Output.AssetId, (k, g) => new
                 {
@@ -276,7 +347,7 @@ namespace AntShares.UI
                 }
                 else
                 {
-                    result = CertificateQueryService.Query(asset.Issuer, asset.CertUrl);
+                    result = CertificateQueryService.Query(asset.Issuer);
                 }
                 using (result)
                 {
@@ -333,17 +404,17 @@ namespace AntShares.UI
             using (OpenWalletDialog dialog = new OpenWalletDialog())
             {
                 if (dialog.ShowDialog() != DialogResult.OK) return;
-                //if (UserWallet.GetVersion(dialog.WalletPath) < Version.Parse("0.6.6043.32131"))
-                //{
-                //    if (MessageBox.Show(Strings.MigrateWalletMessage, Strings.MigrateWalletCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) != DialogResult.Yes)
-                //        return;
-                //    string path_old = Path.ChangeExtension(dialog.WalletPath, ".old.db3");
-                //    string path_new = Path.ChangeExtension(dialog.WalletPath, ".new.db3");
-                //    UserWallet.Migrate(dialog.WalletPath, path_new);
-                //    File.Move(dialog.WalletPath, path_old);
-                //    File.Move(path_new, dialog.WalletPath);
-                //    MessageBox.Show($"{Strings.MigrateWalletSucceedMessage}\n{path_old}");
-                //}
+                if (UserWallet.GetVersion(dialog.WalletPath) < Version.Parse("1.3.5"))
+                {
+                    if (MessageBox.Show(Strings.MigrateWalletMessage, Strings.MigrateWalletCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) != DialogResult.Yes)
+                        return;
+                    string path_old = Path.ChangeExtension(dialog.WalletPath, ".old.db3");
+                    string path_new = Path.ChangeExtension(dialog.WalletPath, ".new.db3");
+                    UserWallet.Migrate(dialog.WalletPath, path_new);
+                    File.Move(dialog.WalletPath, path_old);
+                    File.Move(path_new, dialog.WalletPath);
+                    MessageBox.Show($"{Strings.MigrateWalletSucceedMessage}\n{path_old}");
+                }
                 UserWallet wallet;
                 try
                 {
@@ -488,8 +559,13 @@ namespace AntShares.UI
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            查看私钥VToolStripMenuItem.Enabled = listView1.SelectedIndices.Count == 1 && ((Contract)listView1.SelectedItems[0].Tag).IsStandard;
-            viewContractToolStripMenuItem.Enabled = listView1.SelectedIndices.Count == 1;
+            查看私钥VToolStripMenuItem.Enabled =
+                listView1.SelectedIndices.Count == 1 &&
+                listView1.SelectedItems[0].Tag is Contract &&
+                ((Contract)listView1.SelectedItems[0].Tag).IsStandard;
+            viewContractToolStripMenuItem.Enabled =
+                listView1.SelectedIndices.Count == 1 &&
+                listView1.SelectedItems[0].Tag is Contract;
             复制到剪贴板CToolStripMenuItem.Enabled = listView1.SelectedIndices.Count == 1;
             删除DToolStripMenuItem.Enabled = listView1.SelectedIndices.Count > 0;
         }
@@ -510,10 +586,21 @@ namespace AntShares.UI
             {
                 if (dialog.ShowDialog() != DialogResult.OK) return;
                 listView1.SelectedIndices.Clear();
-                Account account = Program.CurrentWallet.Import(dialog.WIF);
-                foreach (Contract contract in Program.CurrentWallet.GetContracts(account.PublicKeyHash))
+                foreach (string wif in dialog.WifStrings)
                 {
-                    AddContractToListView(contract, true);
+                    Account account;
+                    try
+                    {
+                        account = Program.CurrentWallet.Import(wif);
+                    }
+                    catch (FormatException)
+                    {
+                        continue;
+                    }
+                    foreach (Contract contract in Program.CurrentWallet.GetContracts(account.PublicKeyHash))
+                    {
+                        AddContractToListView(contract, true);
+                    }
                 }
             }
         }
@@ -528,6 +615,33 @@ namespace AntShares.UI
                 foreach (Contract contract in Program.CurrentWallet.GetContracts(account.PublicKeyHash))
                 {
                     AddContractToListView(contract, true);
+                }
+            }
+        }
+
+        private void importWatchOnlyAddressToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string text = InputBox.Show(Strings.Address, Strings.ImportWatchOnlyAddress);
+            if (string.IsNullOrEmpty(text)) return;
+            using (StringReader reader = new StringReader(text))
+            {
+                while (true)
+                {
+                    string address = reader.ReadLine();
+                    if (address == null) break;
+                    address = address.Trim();
+                    if (string.IsNullOrEmpty(address)) continue;
+                    UInt160 scriptHash;
+                    try
+                    {
+                        scriptHash = Wallet.ToScriptHash(address);
+                    }
+                    catch (FormatException)
+                    {
+                        continue;
+                    }
+                    Program.CurrentWallet.AddWatchOnly(scriptHash);
+                    AddAddressToListView(scriptHash, true);
                 }
             }
         }
@@ -593,11 +707,12 @@ namespace AntShares.UI
         {
             if (MessageBox.Show(Strings.DeleteAddressConfirmationMessage, Strings.DeleteAddressConfirmationCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
                 return;
-            Contract[] contracts = listView1.SelectedItems.OfType<ListViewItem>().Select(p => (Contract)p.Tag).ToArray();
-            foreach (Contract contract in contracts)
+            object[] tags = listView1.SelectedItems.OfType<ListViewItem>().Select(p => p.Tag).ToArray();
+            foreach (object tag in tags)
             {
-                listView1.Items.RemoveByKey(contract.Address);
-                Program.CurrentWallet.DeleteContract(contract.ScriptHash);
+                UInt160 scriptHash = (tag as UInt160) ?? ((Contract)tag).ScriptHash;
+                listView1.Items.RemoveByKey(Wallet.ToAddress(scriptHash));
+                Program.CurrentWallet.DeleteAddress(scriptHash);
             }
             balance_changed = true;
         }

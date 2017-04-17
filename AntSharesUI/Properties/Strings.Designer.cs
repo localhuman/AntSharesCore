@@ -97,6 +97,15 @@ namespace AntShares.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address.
+        /// </summary>
+        internal static string Address {
+            get {
+                return ResourceManager.GetString("Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change password successful..
         /// </summary>
         internal static string ChangePasswordSuccessful {
@@ -142,6 +151,24 @@ namespace AntShares.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter remark here, which will be recorded on the blockchain.
+        /// </summary>
+        internal static string EnterRemarkMessage {
+            get {
+                return ResourceManager.GetString("EnterRemarkMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transaction Remark.
+        /// </summary>
+        internal static string EnterRemarkTitle {
+            get {
+                return ResourceManager.GetString("EnterRemarkTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expired.
         /// </summary>
         internal static string ExpiredCertificate {
@@ -156,6 +183,15 @@ namespace AntShares.Properties {
         internal static string Failed {
             get {
                 return ResourceManager.GetString("Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Watch-Only Address.
+        /// </summary>
+        internal static string ImportWatchOnlyAddress {
+            get {
+                return ResourceManager.GetString("ImportWatchOnlyAddress", resourceCulture);
             }
         }
         
@@ -232,7 +268,8 @@ namespace AntShares.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Opening wallet files in older versions, update to newest format?\nNote: updated files cannot be openned by clients in older versions!.
+        ///   Looks up a localized string similar to Opening wallet files in older versions, update to newest format?
+        ///Note: updated files cannot be openned by clients in older versions!.
         /// </summary>
         internal static string MigrateWalletMessage {
             get {
