@@ -109,8 +109,8 @@ namespace AntShares
             using (Blockchain.RegisterBlockchain(new LevelDBBlockchain(Settings.Default.DataDirectoryPath)))
             using (LocalNode = new LocalNode())
             {
-                LocalNode.UpnpEnabled = true;
-                Application.Run(MainForm = new MainForm(xdoc));
+               LocalNode.UpnpEnabled = true;
+               Application.Run(MainForm = new MainForm(xdoc));
             }
         }
     }

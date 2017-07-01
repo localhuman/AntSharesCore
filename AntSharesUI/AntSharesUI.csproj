@@ -3,9 +3,6 @@
   <Import Project="..\packages\SQLite.3.13.0\build\net45\SQLite.props" Condition="Exists('..\packages\SQLite.3.13.0\build\net45\SQLite.props')" />
   <Import Project="..\packages\SQLite.Native.3.12.3\build\net45\SQLite.Native.props" Condition="Exists('..\packages\SQLite.Native.3.12.3\build\net45\SQLite.Native.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <configuration>
-    <dllmap dll="LevelDB.Net.dll" target="libleveldb.dylib"/>
-  </configuration>
 
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -15,7 +12,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AntShares</RootNamespace>
     <AssemblyName>AntSharesUI</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <PublishUrl>发布\</PublishUrl>
@@ -36,7 +32,7 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <UseMSBuildEngine>false</UseMSBuildEngine>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>AntShares.Program</StartupObject>
@@ -48,12 +44,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MONO_LOG_LEVEL=debug</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -63,12 +60,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AntShares, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AntShares.1.6.1\lib\net461\AntShares.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Extensions.PlatformAbstractions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.PlatformAbstractions.1.1.0\lib\net451\Microsoft.Extensions.PlatformAbstractions.dll</HintPath>
       <Private>True</Private>
@@ -151,10 +145,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="MonoMac, Version=0.0.0.0, Culture=neutral" />
     <Reference Include="AntShares.VM">
       <HintPath>..\packages\AntShares.VM.1.8.0\lib\net461\AntShares.VM.dll</HintPath>
     </Reference>
@@ -186,9 +178,6 @@
     </Reference>
     <Reference Include="System.Text.Encodings.Web">
       <HintPath>..\packages\System.Text.Encodings.Web.4.3.1\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.ReaderWriter">
-      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Data.Sqlite">
       <HintPath>..\packages\Microsoft.Data.Sqlite.1.1.1\lib\net451\Microsoft.Data.Sqlite.dll</HintPath>
@@ -290,6 +279,12 @@
       <HintPath>..\packages\Microsoft.AspNetCore.Server.Kestrel.Https.1.1.2\lib\net451\Microsoft.AspNetCore.Server.Kestrel.Https.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security.Win32" />
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\Library\Frameworks\Mono.framework\Versions\5.2.0\lib\mono\4.6.1-api\System.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="AntShares">
+      <HintPath>..\packages\AntShares.1.6.1\lib\netstandard1.6\AntShares.dll</HintPath>
+    </Reference>
     <Reference Include="LevelDB.Net">
       <HintPath>..\packages\LevelDB.Net.1.2.1\lib\net40\LevelDB.Net.dll</HintPath>
     </Reference>
@@ -734,15 +729,21 @@
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </None>
-    <None Include="UI\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
     <None Include="UI\VotingDialog.resx">
       <DependentUpon>VotingDialog.cs</DependentUpon>
     </None>
     <None Include="UI\VotingDialog.zh-Hans.resx">
       <DependentUpon>VotingDialog.cs</DependentUpon>
+    </None>
+    <EmbeddedResource Include="UI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="LevelDB.Net.dll.config" />
+    <None Include="libleveldb.dylib">
+      <IncludeInPackage>false</IncludeInPackage>
+      <Generator>libleveldb</Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

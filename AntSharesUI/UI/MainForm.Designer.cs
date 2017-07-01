@@ -368,10 +368,10 @@
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
-            this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView1.Groups"))),
-            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView1.Groups1"))),
-            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView1.Groups2")))});
+//            this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+//            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView1.Groups"))),
+//            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView1.Groups1"))),
+//            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView1.Groups2")))});
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listView1.HideSelection = false;
             this.listView1.Name = "listView1";
@@ -597,9 +597,9 @@
             this.listView2.ContextMenuStrip = this.contextMenuStrip2;
             this.listView2.FullRowSelect = true;
             this.listView2.GridLines = true;
-            this.listView2.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView2.Groups"))),
-            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView2.Groups1")))});
+//            this.listView2.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+//            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView2.Groups"))),
+//            ((System.Windows.Forms.ListViewGroup)(resources.GetObject("listView2.Groups1")))});
             this.listView2.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listView2.HideSelection = false;
             this.listView2.Name = "listView2";
