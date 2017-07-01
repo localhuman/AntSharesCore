@@ -551,11 +551,18 @@ namespace AntShares.UI
 
         private void 注册资产RToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            InvocationTransaction tx;
             using (AssetRegisterDialog dialog = new AssetRegisterDialog())
             {
                 if (dialog.ShowDialog() != DialogResult.OK) return;
-                Helper.SignAndShowInformation(dialog.GetTransaction());
+                tx = dialog.GetTransaction();
             }
+            using (InvokeContractDialog dialog = new InvokeContractDialog(tx))
+            {
+                if (dialog.ShowDialog() != DialogResult.OK) return;
+                tx = dialog.GetTransaction();
+            }
+            Helper.SignAndShowInformation(tx);
         }
 
         private void 资产分发IToolStripMenuItem_Click(object sender, EventArgs e)
@@ -569,11 +576,18 @@ namespace AntShares.UI
 
         private void deployContractToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            InvocationTransaction tx;
             using (DeployContractDialog dialog = new DeployContractDialog())
             {
                 if (dialog.ShowDialog() != DialogResult.OK) return;
-                Helper.SignAndShowInformation(dialog.GetTransaction());
+                tx = dialog.GetTransaction();
             }
+            using (InvokeContractDialog dialog = new InvokeContractDialog(tx))
+            {
+                if (dialog.ShowDialog() != DialogResult.OK) return;
+                tx = dialog.GetTransaction();
+            }
+            Helper.SignAndShowInformation(tx);
         }
 
         private void invokeContractToolStripMenuItem_Click(object sender, EventArgs e)
@@ -587,11 +601,18 @@ namespace AntShares.UI
 
         private void 选举EToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            InvocationTransaction tx;
             using (ElectionDialog dialog = new ElectionDialog())
             {
                 if (dialog.ShowDialog() != DialogResult.OK) return;
-                Helper.SignAndShowInformation(dialog.GetTransaction());
+                tx = dialog.GetTransaction();
             }
+            using (InvokeContractDialog dialog = new InvokeContractDialog(tx))
+            {
+                if (dialog.ShowDialog() != DialogResult.OK) return;
+                tx = dialog.GetTransaction();
+            }
+            Helper.SignAndShowInformation(tx);
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
