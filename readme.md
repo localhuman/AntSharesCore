@@ -5,12 +5,12 @@ This repository is a container for the Antshares Wallet application ( UI ) as we
 ## Antshares UI
 
 The UI Application works on the following platforms:
-|                                   | AntSharesCore-UI  |
-| --------------------------------- | ----------------- |
-| Windows 7 SP1 x64                 |        ✅         |
-| Windows Server 2008 R2 SP1        |         ✅        |
-| Linux (All variants)              |                   |
-| OSX                               |                   |
+
+| Platform      | Wallet         |
+| ------------- |:-------------: |
+| Windows       | ✅             |
+| Linux (All)   | ❌             |
+| OSX           | ❌             |
 
 Development is in process for a cross-platform GUI wallet application.
 
