@@ -45,7 +45,7 @@ dotnet
 
 
 ### Extra dependencies for compiling
-If you would like to compile the project, you will also need the most recent version of MonoFramework.  You can search the internet to download/install from here: http://www.mono-project.com/download/.  You can also use Homebrew to install it with `brew install mono`
+If you would like to compile the project with mono instead of .NET Core, you will also need the most recent version of MonoFramework.  You can search the internet to download/install from here: http://www.mono-project.com/download/.  You can also use Homebrew to install it with `brew install mono`
 
 ### Get the project
 
@@ -62,10 +62,17 @@ change diretory to the project repository and restore packages by using the foll
 nuget restore AntsharesCore.sln
 ```
 
-now you can build the daemon with `msbuild` which is part of the Mono Framework
+You can now build the project with `dotnet`:
 
 ```
-cd $PROJECT_ROOT/AntsharesDaemon
+cd $PROJECT_ROOT/AntSharesDaemon
+dotnet build
+```
+
+or you can build the daemon with `msbuild` which is part of the Mono Framework
+
+```
+cd $PROJECT_ROOT/AntSharesDaemon
 msbuild
 ```
 
